@@ -5,47 +5,70 @@ services:
   # SERVICIO SERVIDOR WEB CON APAACHE 7 - INSTALADO
   #--------------------------------------------------
 
-  #NOMBRE DEL SERVICIO
+  # NOMBRE DEL SERVICIO
   web:
-    #IMAGEN USADA
+    # IMAGEN USADA
     image: php:7.2-apache
-    #NOMBRE DEL CONTENEDOR AL ARRANCAR
+    # NOMBRE DEL CONTENEDOR AL ARRANCAR
     container_name: web
-    #REDIRECCIÓN DE PUERTOS
+    # REDIRECCIÓN DE PUERTOS
     ports:
       - 8181:80 
-    #DISTINTOS VOLÚMENES A USAR EN EL CONTENEDOR
+    # DISTINTOS VOLÚMENES A USAR EN EL CONTENEDOR
     volumes:
       #CON BIND MOUNT
       - -/repos:/usr/local/apache2/htdocs
       # DOCKER VOLUME
       - html:/usr/local/apache2/htdocs/otro_volumen 
-    #SERVICIOS QUE TIENEN QUE ARRANCAR ANTES DE ARRANCAR ESTE
+    # SERVICIOS QUE TIENEN QUE ARRANCAR ANTES DE ARRANCAR ESTE
     depends_on:
      - mysql
+    # REDES A USAR
+    networks:
+      - ejemplo
   
   #--------------------------------------------------
   # SERVICIO SERVIDOR DE BASE DE DATOS MYSQL:5.7
   #--------------------------------------------------
+
+  # NOMBRE DEL SERVICIO
   mysql:
+    # IMAGEN USADO
     image: mysql:5.7
+    # NOMBRE QUE LE VOY A DAR AL CONTENEDOR
     container_name: bd
+    # LISTA DE VALORES DE ENTORNO CON SUS VALORES
     environment:
       MYSQL_ROOT_PASSWORD: 123456
+    # REDIRECCIÓN DE PUERTOS
     ports:
       - 3316:3306
+    # VOLÚMENES A USAR POR EL CONTENEDOR
     volumes:
+      # DOCKER VOLUME
       - data:/var/lib/mysql
+    # REDES A USAR
     networks:
       - ejemplo
+
+# DEFINICIÓN DE VOLÚMENES DOCKER A USAR POR LOS SERVICIOS (OPCIONAL)
 volumes:
+  # NOMBRE DEL VOLUMEN
   html:
+    # TIPO DE DRIVER
     driver: local
+  # NOMBRE DEL VOLUMEN
   data:
+    # TIPO DE DRIVER
     driver: local
+    
+# DEFINICIÓN DE LAS REDES A USAR POR LOS SERVICIOS (OPCIONAL)
 networks:
+  # NOMBRE DE LA RED
   ejemplo:
+    # DRIVER DE LA RED
     driver: bridge
+    # OPCIONES ESPECÍFICAS DEL DRIVER
     driver_opts:        
       subnet: 172.50.0.0/16
       gateway: 172.50.0.1
