@@ -1,0 +1,53 @@
+version: '3'
+services:
+  
+  #--------------------------------------------------
+  # SERVICIO SERVIDOR WEB CON APAACHE 7 - INSTALADO
+  #--------------------------------------------------
+
+  #NOMBRE DEL SERVICIO
+  web:
+    #IMAGEN USADA
+    image: php:7.2-apache
+    #NOMBRE DEL CONTENEDOR AL ARRANCAR
+    container_name: web
+    #REDIRECCIÓN DE PUERTOS
+    ports:
+      - 8181:80 
+    #DISTINTOS VOLÚMENES A USAR EN EL CONTENEDOR
+    volumes:
+      #CON BIND MOUNT
+      - -/repos:/usr/local/apache2/htdocs
+      # DOCKER VOLUME
+      - html:/usr/local/apache2/htdocs/otro_volumen 
+    #SERVICIOS QUE TIENEN QUE ARRANCAR ANTES DE ARRANCAR ESTE
+    depends_on:
+     - mysql
+  
+  #--------------------------------------------------
+  # SERVICIO SERVIDOR DE BASE DE DATOS MYSQL:5.7
+  #--------------------------------------------------
+  mysql:
+    image: mysql:5.7
+    container_name: bd
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - 3316:3306
+    volumes:
+      - data:/var/lib/mysql
+    networks:
+      - ejemplo
+volumes:
+  html:
+    driver: local
+  data:
+    driver: local
+networks:
+  ejemplo:
+    driver: bridge
+    driver_opts:        
+      subnet: 172.50.0.0/16
+      gateway: 172.50.0.1
+
+  
