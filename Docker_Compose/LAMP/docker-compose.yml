@@ -8,6 +8,7 @@ services:
       - '3346:3306'
     environment: 
       - MYSQL_ROOT_PASSWORD=iesalixar
+      - MYSQL_DATABASE=wordpress
       - MYSQL_USER=daw2tarde
       - MYSQL_PASSWORD=daw2tarde
     volumes:
@@ -22,6 +23,12 @@ services:
       - 'webfolder:/var/www/html'
     depends_on: 
       - mariadb
+    # Si queremos que funcionen la aplicaciones que use mysqli debemos instalar ese módulo de php con 
+    # el siguiente comando que viene dentro del contenedor
+    # docker-php-ext-install mysqli
+    # Podemos comprobar que está instalado con php -m
+    # Tras instalarlo debemos reiniciar el servicio
+    # Recodar que todo lo que está en /var/www/html debe pertencer al usuario www-data 
 volumes:
   webfolder:
     driver: local
