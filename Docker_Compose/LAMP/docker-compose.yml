@@ -14,7 +14,9 @@ services:
     volumes:
       - 'data:/var/lib/mysql'
   apachephp:
-    image: 'php:7.2-apache'
+    #image: 'php:7.2-apache'
+    # Para usar una vez hayamos explicado lo que es docker build
+    image: 'iesalixar/php72mysqli'
     container_name: 'webserver'
     hostname: 'apache'
     ports:
